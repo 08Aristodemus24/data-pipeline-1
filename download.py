@@ -1,7 +1,6 @@
 import os
 import requests
 from scipy.io import loadmat
-from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
 from pathlib import Path
 from argparse import ArgumentParser
