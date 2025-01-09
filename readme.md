@@ -19,6 +19,11 @@
 # Articles, Videos, Research Papers:
 * building a data pipeline using airflow, apache spark, emr, & snowflake: https://youtu.be/hK4kPvJawv8?si=4n4rkcgdzB26fasQ
 * free tools used for data engineering projects: https://www.youtube.com/watch?v=M7eGUM28Ke4&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=28&pp=gAQBiAQB
+* https://stackoverflow.com/questions/47811129/requests-in-python-is-not-downloading-file-completely
+* https://realpython.com/python-download-file-from-url/
+* 
 
-# External EEG data
+# Data sources:
 * http://gigadb.org/dataset/100295
+* database for ecg signals: https://physionet.org/about/database/
+* healthcare data api https://data.cms.gov/provider-data/search
