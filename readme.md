@@ -28,4 +28,6 @@
 * database for ecg signals: https://physionet.org/about/database/
 * healthcare data api: https://data.cms.gov/provider-data/search
 * kaggle eeg features: https://www.kaggle.com/code/huvinh/eeg-extract-features
-* book api: https://openlibrary.org/dev/docs/api/books
+* book api: 
+https://openlibrary.org/dev/docs/api/books
+https://openlibrary.org/developers/api
