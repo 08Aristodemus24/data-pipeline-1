@@ -1,14 +1,17 @@
 # This is my first data engineering project aiming to create data pipeline to extract eeg signals, transform them into usable features, and load the tables into a data warehouse.
 
 # Usage:
-1. clone repository with `git clone https://github.com/08Aristodemus24/eeg-ml-pipeline`
+1. clone repository with `git clone https://github.com/08Aristodemus24/data-pipeline-1`
 2. navigate to directory with `readme.md` and `requirements.txt` file
-3. run command; `conda create -n <name of env e.g. eeg-ml-pipeline> python=3.12.3`. Note that 3.12.3 must be the python version otherwise packages to be installed would not be compatible with a different python version
+3. run command; `conda create -n <name of env e.g. data-pipeline-1> python=3.12.3`. Note that 3.12.3 must be the python version otherwise packages to be installed would not be compatible with a different python version
 4. once environment is created activate it by running command `conda activate`
-5. then run `conda activate eeg-ml-pipeline`
+5. then run `conda activate data-pipeline-1`
 6. check if pip is installed by running `conda list -e` and checking list
 7. if it is there then move to step 8, if not then install `pip` by typing `conda install pip`
 8. if `pip` exists or install is done run `pip install -r requirements.txt` in the directory you are currently in
+9. install jdk-17 and java 8 for apache spark
+10. install airflow using this `pip install "apache-airflow[celery]==2.10.4" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.4/constraints-3.12.txt"`
+
 
 # Tools that I might use:
 * Apache Airflow - data orchestration, workflow, and manager for steps in the data pipeline
