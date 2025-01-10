@@ -29,5 +29,14 @@
 * healthcare data api: https://data.cms.gov/provider-data/search
 * kaggle eeg features: https://www.kaggle.com/code/huvinh/eeg-extract-features
 * book api: 
-https://openlibrary.org/dev/docs/api/books
-https://openlibrary.org/developers/api
+* https://openlibrary.org/dev/docs/api/books
+* https://openlibrary.org/developers/api
+* forex trades: https://polygon.io/docs/forex/getting-started
+- keep an eye on forexTicker/currency pair since it has the attributes/columns you need for every time interval (e.g. day) such as closing price, opening price, highest price, lowest price, and volume all of which you can use for signal processing
+* stock trades data: https://polygon.io/docs/stocks/
+- keep an eye on tickers parameter since it represents the companys short name apple inc. for instance is short for AAPL and you can use this for the tickers parameter
+* list of tickers in the stock market: https://stockanalysis.com/stocks/
+
+we want ot get previous stocks from the last years let's say, and continue getting the stock or forex OHLC (open, high, low, close) for the coming days or depending what time interval you want
+
+let's say we want to get the C:USDPHP
