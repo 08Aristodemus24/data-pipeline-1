@@ -19,11 +19,16 @@
 * Apache Spark (PySpark)/DBT (data build tool) - for transforming the raw eeg signals into usable features
 * Amazon S3 - store raw eeg, and the transformed features
 
-# Articles, Videos, Research Papers:
+# Resources:
+## Videos:
 * building a data pipeline using airflow, apache spark, emr, & snowflake: https://youtu.be/hK4kPvJawv8?si=4n4rkcgdzB26fasQ
 * free tools used for data engineering projects: https://www.youtube.com/watch?v=M7eGUM28Ke4&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=28&pp=gAQBiAQB
+* sql window functions: https://www.youtube.com/watch?v=7NBt0V8ebGk&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=2
+## Articles:
 * https://stackoverflow.com/questions/47811129/requests-in-python-is-not-downloading-file-completely
 * https://realpython.com/python-download-file-from-url/
+* pyspark and aws s3: https://medium.com/@bharadwajaryan30/handling-big-data-with-pyspark-and-aws-s3-f2a3f28419a9
+* installing and configuring apache airflow: https://medium.com/orchestras-data-release-pipeline-blog/installing-and-configuring-apache-airflow-a-step-by-step-guide-5ff602c47a36
 * 
 
 # Data sources:
