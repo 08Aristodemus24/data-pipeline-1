@@ -23,13 +23,15 @@
 ## Videos:
 * building a data pipeline using airflow, apache spark, emr, & snowflake: https://youtu.be/hK4kPvJawv8?si=4n4rkcgdzB26fasQ
 * free tools used for data engineering projects: https://www.youtube.com/watch?v=M7eGUM28Ke4&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=28&pp=gAQBiAQB
-* sql window functions: https://www.youtube.com/watch?v=7NBt0V8ebGk&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=2
+* sql window functions intermediate mysql: https://www.youtube.com/watch?v=7NBt0V8ebGk&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=2
+* sql window functions rank dense rank lead lag: https://www.youtube.com/watch?v=Ww71knvhQ-s&list=PLCBT00GZN_SAzwTS-SuLRM547_4MUHPuM&index=1&t=1189s&pp=gAQBiAQB
+
 ## Articles:
 * https://stackoverflow.com/questions/47811129/requests-in-python-is-not-downloading-file-completely
 * https://realpython.com/python-download-file-from-url/
 * pyspark and aws s3: https://medium.com/@bharadwajaryan30/handling-big-data-with-pyspark-and-aws-s3-f2a3f28419a9
 * installing and configuring apache airflow: https://medium.com/orchestras-data-release-pipeline-blog/installing-and-configuring-apache-airflow-a-step-by-step-guide-5ff602c47a36
-* 
+* moving average: https://learnsql.com/blog/moving-average-in-sql/
 
 # Data sources:
 * motor imagery eeg: http://gigadb.org/dataset/100295
