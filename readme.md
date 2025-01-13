@@ -13,6 +13,15 @@
 10. install airflow using this `pip install "apache-airflow[celery]==2.10.4" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.4/constraints-3.12.txt"`
 
 
+# Insights:
+* error may occur once airflow is installed in the environment especially in a windows os 
+```
+C:\Users\LARRY\anaconda3\envs\data-pipeline-1\Lib\site-packages\airflow\__init__.py:36: RuntimeWarning: Airflow currently can be run on POSIX-compliant Operating Systems. For development, it is regularly tested on fairly modern Linux Distros and recent versions of macOS. On Windows you can run it via WSL2 (Windows Subsystem for Linux 2) or via Linux Containers. The work to add Windows support is tracked via https://github.com/apache/airflow/issues/10388, but it is not a high priority.
+  warnings.warn(
+OSError while attempting to symlink the latest log directory
+```
+to solve this we need to install a linux runtime environment in order to use airflow since airflow is built for a linux os 
+
 # Tools that I might use:
 * Apache Airflow - data orchestration, workflow, and manager for steps in the data pipeline
 * Snowflake/Databricks - for data warehousing
