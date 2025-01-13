@@ -28,7 +28,6 @@ packaging==24.2
 pandas==2.2.3
 parso==0.8.4
 pillow==11.0.0
-pip==24.2
 platformdirs==4.3.6
 prompt_toolkit==3.0.48
 psutil==6.1.1
@@ -42,7 +41,6 @@ python-dateutil==2.9.0.post0
 python-docx==1.1.2
 python-dotenv==1.0.1
 pytz==2024.2
-pywin32==308
 pyzmq==26.2.0
 requests==2.32.3
 scipy==1.14.1

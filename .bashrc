@@ -1,0 +1,1 @@
+export PATH=/mnt/c/users/LARRY/anaconda3:mnt/c/users/LARRY/anaconda3/condabin:/mnt/c/users/LARRY/anaconda3/Scripts
