@@ -29,7 +29,9 @@ from operators.transform_forex_data import transform_forex_data
 
 
 def test_pull_forex_data():
-    return "/opt/***/data/usd_php_forex_4hour.csv"
+    # mimics replacement of file path when returned from pull_forex_data task
+    new_file_path = "/opt/***/data/usd_php_forex_4hour.csv".replace("***", "airflow")
+    return new_file_path
 
 # POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
 POLYGON_API_KEY = Variable.get('POLYGON_API_KEY')
