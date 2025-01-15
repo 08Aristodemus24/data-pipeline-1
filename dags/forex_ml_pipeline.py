@@ -4,10 +4,15 @@ import os
 import shutil
 import time
 
+from pathlib import Path
+from dotenv import load_dotenv
+
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
+from utilities.preprocessors import reformat_date
+from operators.pull_forex_data import pull_forex_data
 # pip install 'apache-airflow[amazon]'
 # from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
 # from airflow.providers.amazon.aws.transfers.local_to_s3 import (
@@ -19,8 +24,14 @@ from airflow.operators.python import PythonOperator
 # go to this site if you want to use cron instead of datetime to set schedule_interval
 # https://crontab.guru/#00_12_*_*_Sun
 
-def test():
-    print("hello world")
+
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# use this only in development
+env_dir = Path('./').resolve()
+load_dotenv(os.path.join(env_dir, '.env'))
+
+POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
 
 default_args = {
     'owner': 'mikhail',
@@ -41,5 +52,9 @@ with DAG(
     
     pull_forex_data = PythonOperator(
         task_id='pull_forex_data',
-        python_callable=test,
+        python_callable=pull_forex_data,
+        op_kwargs={
+            "formatter": reformat_date,
+            "api_key": POLYGON_API_KEY 
+        }
     )
