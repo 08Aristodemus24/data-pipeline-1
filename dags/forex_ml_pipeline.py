@@ -76,5 +76,5 @@ with DAG(
         task_id='transform_forex_data',
         python_callable=transform_forex_data
     )
-
+    
     pull_forex_data >> transform_forex_data
