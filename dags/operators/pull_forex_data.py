@@ -16,6 +16,7 @@ def pull_forex_data(start_date: str='january 1 2024',
     start_date_reformed = start_date if formatter == None else formatter(start_date)
     end_date_reformed = end_date if formatter == None else formatter(end_date)
 
+    print(api_key)
     params = {
         "adjusted": True,
         "sort": "asc",
@@ -33,49 +34,52 @@ def pull_forex_data(start_date: str='january 1 2024',
     interval = 5
     start = 0
 
-    try:
-        while True:
-            response = requests.get(url, params=params, headers=headers)
+    print(url)
+    print(headers)
+
+    # try:
+    #     while True:
+    #         response = requests.get(url, params=params, headers=headers)
             
-            if response.status_code == 200:
-                data_batch = response.json()
-                print(data_batch)
-                if not "next_url" in data_batch:
-                    break
+    #         if response.status_code == 200:
+    #             data_batch = response.json()
+    #             print(data_batch)
+    #             if not "next_url" in data_batch:
+    #                 break
 
-                df = pd.DataFrame(data_batch['results'])
-                data_batches.append(df)
-                url = data_batch['next_url']
+    #             df = pd.DataFrame(data_batch['results'])
+    #             data_batches.append(df)
+    #             url = data_batch['next_url']
 
-                # sleep for 1 minute to avoid rate limiting
-                if (start + 1) % interval == 0:
-                    time.sleep(60)
+    #             # sleep for 1 minute to avoid rate limiting
+    #             if (start + 1) % interval == 0:
+    #                 time.sleep(60)
 
-                # increment after 60 seconds
-                start += 1
+    #             # increment after 60 seconds
+    #             start += 1
             
-            elif response.status_code == 401:
-                continue
+    #         elif response.status_code == 401:
+    #             continue
             
-    except HTTPError as e:
-        print(f'{e} has occured.')
+    # except HTTPError as e:
+    #     print(f'{e} has occured.')
 
-    except (ConnectTimeout, Timeout) as e:
-        print(f'{e} has occured.')
+    # except (ConnectTimeout, Timeout) as e:
+    #     print(f'{e} has occured.')
 
-    except JSONDecodeError as e:
-        print(f'error decoding json from response has occured.')
+    # except JSONDecodeError as e:
+    #     print(f'error decoding json from response has occured.')
 
-    # combine batches
-    forex_data = pd.concat(data_batches, ignore_index=True, axis=0)
+    # # combine batches
+    # forex_data = pd.concat(data_batches, ignore_index=True, axis=0)
 
-    # create name for dataframe
-    ticker_name = re.sub(r"C:", "", forex_ticker)
-    str_len = len(ticker_name)
-    chunk_size = str_len // 2
+    # # create name for dataframe
+    # ticker_name = re.sub(r"C:", "", forex_ticker)
+    # str_len = len(ticker_name)
+    # chunk_size = str_len // 2
 
-    # will return usd_php
-    ticker_name = "_".join([ticker_name[i:i + chunk_size].lower() for i in range(0, str_len, chunk_size)])
+    # # will return usd_php
+    # ticker_name = "_".join([ticker_name[i:i + chunk_size].lower() for i in range(0, str_len, chunk_size)])
     
-    # save dataframe to .csv
-    forex_data.to_csv(f'./data/{ticker_name}_forex_{multiplier}{timespan}.csv')
+    # # save dataframe to .csv
+    # forex_data.to_csv(f'./data/{ticker_name}_forex_{multiplier}{timespan}.csv')

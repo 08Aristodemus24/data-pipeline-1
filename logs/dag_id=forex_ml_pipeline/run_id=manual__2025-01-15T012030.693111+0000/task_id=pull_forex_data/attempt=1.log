@@ -1,0 +1,81 @@
+[2025-01-15T01:20:31.679+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-15T01:20:31.692+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T01:20:30.693111+00:00 [queued]>
+[2025-01-15T01:20:31.700+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T01:20:30.693111+00:00 [queued]>
+[2025-01-15T01:20:31.701+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 6
+[2025-01-15T01:20:31.714+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): pull_forex_data> on 2025-01-15 01:20:30.693111+00:00
+[2025-01-15T01:20:31.721+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'forex_ml_pipeline', 'pull_forex_data', 'manual__2025-01-15T01:20:30.693111+00:00', '--job-id', '61', '--raw', '--subdir', 'DAGS_FOLDER/forex_ml_pipeline.py', '--cfg-path', '/tmp/tmp7wy5q0y2']
+[2025-01-15T01:20:31.724+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=231) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-01-15T01:20:31.725+0000] {standard_task_runner.py:105} INFO - Job 61: Subtask pull_forex_data
+[2025-01-15T01:20:31.725+0000] {standard_task_runner.py:72} INFO - Started process 233 to run task
+[2025-01-15T01:20:31.772+0000] {task_command.py:467} INFO - Running <TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T01:20:30.693111+00:00 [running]> on host 81d5d5f5f7ac
+[2025-01-15T01:20:31.852+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mikhail' AIRFLOW_CTX_DAG_ID='forex_ml_pipeline' AIRFLOW_CTX_TASK_ID='pull_forex_data' AIRFLOW_CTX_EXECUTION_DATE='2025-01-15T01:20:30.693111+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-01-15T01:20:30.693111+00:00'
+[2025-01-15T01:20:31.853+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-15T01:22:47.772+0000] {local_task_job_runner.py:346} WARNING - State of this instance has been externally set to restarting. Terminating instance.
+[2025-01-15T01:22:47.774+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2025-01-15T01:22:47.776+0000] {process_utils.py:132} INFO - Sending 15 to group 233. PIDs of all processes in the group: [233]
+[2025-01-15T01:22:47.776+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 233
+[2025-01-15T01:22:47.849+0000] {taskinstance.py:3093} ERROR - Received SIGTERM. Terminating subprocesses.
+[2025-01-15T01:22:47.859+0000] {taskinstance.py:3311} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 422, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/operators/pull_forex_data.py", line 38, in pull_forex_data
+  File "/home/airflow/.local/lib/python3.12/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/connectionpool.py", line 466, in _make_request
+    self._validate_conn(conn)
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/connectionpool.py", line 1095, in _validate_conn
+    conn.connect()
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/connection.py", line 693, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/connection.py", line 199, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3095, in signal_handler
+    raise AirflowTaskTerminated("Task received SIGTERM signal")
+airflow.exceptions.AirflowTaskTerminated: Task received SIGTERM signal
+[2025-01-15T01:22:47.878+0000] {taskinstance.py:1225} INFO - Marking task as UP_FOR_RETRY. dag_id=forex_ml_pipeline, task_id=pull_forex_data, run_id=manual__2025-01-15T01:20:30.693111+00:00, execution_date=20250115T012030, start_date=20250115T012031, end_date=20250115T012247
+[2025-01-15T01:22:47.897+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-15T01:22:47.914+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=233, status='terminated', exitcode=2, started='01:20:31') (233) terminated with exit code 2

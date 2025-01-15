@@ -13,7 +13,7 @@ from airflow.operators.python import PythonOperator
 
 from utilities.preprocessors import reformat_date
 from operators.pull_forex_data import pull_forex_data
-# pip install 'apache-airflow[amazon]'
+# # pip install 'apache-airflow[amazon]'
 # from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
 # from airflow.providers.amazon.aws.transfers.local_to_s3 import (
 #     LocalFilesystemToS3Operator,
@@ -28,11 +28,11 @@ from operators.pull_forex_data import pull_forex_data
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # use this only in development
-env_dir = Path('./').resolve()
+env_dir = Path('./').resolve().parent
 load_dotenv(os.path.join(env_dir, '.env'))
 
-POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
 
+POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
 default_args = {
     'owner': 'mikhail',
     'retries': 5,
@@ -55,6 +55,6 @@ with DAG(
         python_callable=pull_forex_data,
         op_kwargs={
             "formatter": reformat_date,
-            "api_key": POLYGON_API_KEY 
+            "api_key": POLYGON_API_KEY
         }
     )
