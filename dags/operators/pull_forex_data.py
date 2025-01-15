@@ -3,6 +3,7 @@ import requests
 from requests import HTTPError, ConnectionError, JSONDecodeError, ConnectTimeout, Timeout
 import time 
 import re
+import os
 
 
 def pull_forex_data(start_date: str='january 1 2024',
@@ -11,12 +12,14 @@ def pull_forex_data(start_date: str='january 1 2024',
     multiplier: int=4,
     timespan: str='hour',
     formatter=None,
-    api_key=None) -> None:
+    api_key=None,
+    save_path: str="/") -> None:
     
+    # reformat date
     start_date_reformed = start_date if formatter == None else formatter(start_date)
     end_date_reformed = end_date if formatter == None else formatter(end_date)
 
-    print(api_key)
+    # default parameters
     params = {
         "adjusted": True,
         "sort": "asc",
@@ -30,6 +33,7 @@ def pull_forex_data(start_date: str='january 1 2024',
 
     url = f"https://api.polygon.io/v2/aggs/ticker/{forex_ticker}/range/{multiplier}/{timespan}/{start_date_reformed}/{end_date_reformed}"
     
+    # initialize data batches where dataframes would be saved
     data_batches = []
     interval = 5
     start = 0
@@ -37,49 +41,54 @@ def pull_forex_data(start_date: str='january 1 2024',
     print(url)
     print(headers)
 
-    # try:
-    #     while True:
-    #         response = requests.get(url, params=params, headers=headers)
+    try:
+        while True:
+            response = requests.get(url, params=params, headers=headers)
             
-    #         if response.status_code == 200:
-    #             data_batch = response.json()
-    #             print(data_batch)
-    #             if not "next_url" in data_batch:
-    #                 break
+            if response.status_code == 200:
+                data_batch = response.json()
+                print(data_batch)
+                if not "next_url" in data_batch:
+                    break
 
-    #             df = pd.DataFrame(data_batch['results'])
-    #             data_batches.append(df)
-    #             url = data_batch['next_url']
+                df = pd.DataFrame(data_batch['results'])
+                data_batches.append(df)
+                url = data_batch['next_url']
 
-    #             # sleep for 1 minute to avoid rate limiting
-    #             if (start + 1) % interval == 0:
-    #                 time.sleep(60)
+                # sleep for 1 minute to avoid rate limiting
+                if (start + 1) % interval == 0:
+                    time.sleep(60)
 
-    #             # increment after 60 seconds
-    #             start += 1
+                # increment after 60 seconds
+                start += 1
             
-    #         elif response.status_code == 401:
-    #             continue
+            elif response.status_code == 401:
+                continue
             
-    # except HTTPError as e:
-    #     print(f'{e} has occured.')
+    except HTTPError as e:
+        print(f'{e} has occured.')
 
-    # except (ConnectTimeout, Timeout) as e:
-    #     print(f'{e} has occured.')
+    except (ConnectTimeout, Timeout) as e:
+        print(f'{e} has occured.')
 
-    # except JSONDecodeError as e:
-    #     print(f'error decoding json from response has occured.')
+    except JSONDecodeError as e:
+        print(f'error decoding json from response has occured.')
 
     # # combine batches
-    # forex_data = pd.concat(data_batches, ignore_index=True, axis=0)
+    forex_data = pd.concat(data_batches, ignore_index=True, axis=0)
+    # forex_data = pd.concat([pd.DataFrame(), pd.DataFrame()], ignore_index=True, axis=0)
 
-    # # create name for dataframe
-    # ticker_name = re.sub(r"C:", "", forex_ticker)
-    # str_len = len(ticker_name)
-    # chunk_size = str_len // 2
+    # create name for dataframe
+    ticker_name = re.sub(r"C:", "", forex_ticker)
+    str_len = len(ticker_name)
+    chunk_size = str_len // 2
 
-    # # will return usd_php
-    # ticker_name = "_".join([ticker_name[i:i + chunk_size].lower() for i in range(0, str_len, chunk_size)])
-    
-    # # save dataframe to .csv
-    # forex_data.to_csv(f'./data/{ticker_name}_forex_{multiplier}{timespan}.csv')
+    # will return usd_php
+    ticker_name = "_".join([ticker_name[i:i + chunk_size].lower() for i in range(0, str_len, chunk_size)])
+
+    # save dataframe to .csv
+    file_path = os.path.join(save_path, f"{ticker_name}_forex_{multiplier}{timespan}.csv")
+    forex_data.to_csv(file_path)
+
+    # allow task to return file path of the saved .csv
+    return file_path

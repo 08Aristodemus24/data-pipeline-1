@@ -10,9 +10,12 @@ from dotenv import load_dotenv
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
+from airflow.models import Variable
+from airflow.configuration import conf
 
 from utilities.preprocessors import reformat_date
 from operators.pull_forex_data import pull_forex_data
+from operators.transform_forex_data import transform_forex_data
 # # pip install 'apache-airflow[amazon]'
 # from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
 # from airflow.providers.amazon.aws.transfers.local_to_s3 import (
@@ -25,14 +28,16 @@ from operators.pull_forex_data import pull_forex_data
 # https://crontab.guru/#00_12_*_*_Sun
 
 
+def test_pull_forex_data():
+    return "/opt/***/data/usd_php_forex_4hour.csv"
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-# use this only in development
-env_dir = Path('./').resolve().parent
-load_dotenv(os.path.join(env_dir, '.env'))
+# POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
+POLYGON_API_KEY = Variable.get('POLYGON_API_KEY')
 
+airflow_home = conf.get('core', 'dags_folder')
+BASE_DIR = Path(airflow_home).resolve().parent
+DATA_DIR = os.path.join(BASE_DIR, 'data')
 
-POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
 default_args = {
     'owner': 'mikhail',
     'retries': 5,
@@ -50,11 +55,24 @@ with DAG(
     catchup=True
 ) as dag:
     
+    # pull_forex_data = PythonOperator(
+    #     task_id='pull_forex_data',
+    #     python_callable=pull_forex_data,
+    #     op_kwargs={
+    #         "formatter": reformat_date,
+    #         "api_key": POLYGON_API_KEY,
+    #         "save_path": DATA_DIR
+    #     }
+    # )
+
     pull_forex_data = PythonOperator(
         task_id='pull_forex_data',
-        python_callable=pull_forex_data,
-        op_kwargs={
-            "formatter": reformat_date,
-            "api_key": POLYGON_API_KEY
-        }
+        python_callable=test_pull_forex_data,
     )
+
+    transform_forex_data = PythonOperator(
+        task_id='transform_forex_data',
+        python_callable=transform_forex_data
+    )
+
+    pull_forex_data >> transform_forex_data

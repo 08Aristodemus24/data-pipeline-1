@@ -1,0 +1,22 @@
+[2025-01-15T08:07:47.137+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-15T08:07:47.149+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T08:07:45.384111+00:00 [queued]>
+[2025-01-15T08:07:47.156+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T08:07:45.384111+00:00 [queued]>
+[2025-01-15T08:07:47.157+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 6
+[2025-01-15T08:07:47.167+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): pull_forex_data> on 2025-01-15 08:07:45.384111+00:00
+[2025-01-15T08:07:47.174+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'forex_ml_pipeline', 'pull_forex_data', 'manual__2025-01-15T08:07:45.384111+00:00', '--job-id', '204', '--raw', '--subdir', 'DAGS_FOLDER/forex_ml_pipeline.py', '--cfg-path', '/tmp/tmpsw9c6l6x']
+[2025-01-15T08:07:47.177+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=240) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-01-15T08:07:47.177+0000] {standard_task_runner.py:105} INFO - Job 204: Subtask pull_forex_data
+[2025-01-15T08:07:47.178+0000] {standard_task_runner.py:72} INFO - Started process 242 to run task
+[2025-01-15T08:07:47.214+0000] {task_command.py:467} INFO - Running <TaskInstance: forex_ml_pipeline.pull_forex_data manual__2025-01-15T08:07:45.384111+00:00 [running]> on host fcdf57df22df
+[2025-01-15T08:07:47.278+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mikhail' AIRFLOW_CTX_DAG_ID='forex_ml_pipeline' AIRFLOW_CTX_TASK_ID='pull_forex_data' AIRFLOW_CTX_EXECUTION_DATE='2025-01-15T08:07:45.384111+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-01-15T08:07:45.384111+00:00'
+[2025-01-15T08:07:47.279+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-15T08:07:47.289+0000] {logging_mixin.py:190} INFO - https://api.polygon.io/v2/aggs/ticker/C:USDPHP/range/4/hour/2024-01-01/2025-01-01
+[2025-01-15T08:07:47.289+0000] {logging_mixin.py:190} INFO - {'Authorization': 'Bearer ***', 'Content-Type': 'application/json'}
+[2025-01-15T08:07:47.293+0000] {logging_mixin.py:190} INFO - files: ['logs', 'dags', '***.cfg', 'plugins', 'config', 'usd_php_forex_4hour.csv', 'data']
+[2025-01-15T08:07:47.293+0000] {logging_mixin.py:190} INFO - ilepaht: /opt/***/usd_php_forex_4hour.csv
+[2025-01-15T08:07:47.297+0000] {python.py:240} INFO - Done. Returned value was: None
+[2025-01-15T08:07:47.304+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-15T08:07:47.305+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=forex_ml_pipeline, task_id=pull_forex_data, run_id=manual__2025-01-15T08:07:45.384111+00:00, execution_date=20250115T080745, start_date=20250115T080747, end_date=20250115T080747
+[2025-01-15T08:07:47.353+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-01-15T08:07:47.369+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-01-15T08:07:47.373+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

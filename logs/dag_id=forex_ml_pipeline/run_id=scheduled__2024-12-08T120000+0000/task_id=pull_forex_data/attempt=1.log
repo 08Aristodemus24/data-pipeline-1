@@ -1,19 +1,21 @@
-[2025-01-14T02:52:41.752+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
-[2025-01-14T02:52:41.765+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [queued]>
-[2025-01-14T02:52:41.773+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [queued]>
-[2025-01-14T02:52:41.775+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 6
-[2025-01-14T02:52:41.798+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): pull_forex_data> on 2024-12-08 12:00:00+00:00
-[2025-01-14T02:52:41.805+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=791) is multi-threaded, use of fork() may lead to deadlocks in the child.
-[2025-01-14T02:52:41.805+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'forex_ml_pipeline', 'pull_forex_data', 'scheduled__2024-12-08T12:00:00+00:00', '--job-id', '52', '--raw', '--subdir', 'DAGS_FOLDER/forex_ml_pipeline.py', '--cfg-path', '/tmp/tmprolpb48d']
-[2025-01-14T02:52:41.807+0000] {standard_task_runner.py:72} INFO - Started process 799 to run task
-[2025-01-14T02:52:41.807+0000] {standard_task_runner.py:105} INFO - Job 52: Subtask pull_forex_data
-[2025-01-14T02:52:41.861+0000] {task_command.py:467} INFO - Running <TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [running]> on host 81d5d5f5f7ac
-[2025-01-14T02:52:41.955+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mikhail' AIRFLOW_CTX_DAG_ID='forex_ml_pipeline' AIRFLOW_CTX_TASK_ID='pull_forex_data' AIRFLOW_CTX_EXECUTION_DATE='2024-12-08T12:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-08T12:00:00+00:00'
-[2025-01-14T02:52:41.956+0000] {taskinstance.py:731} INFO - ::endgroup::
-[2025-01-14T02:52:41.972+0000] {logging_mixin.py:190} INFO - hello world
-[2025-01-14T02:52:41.972+0000] {python.py:240} INFO - Done. Returned value was: None
-[2025-01-14T02:52:41.981+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
-[2025-01-14T02:52:41.981+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=forex_ml_pipeline, task_id=pull_forex_data, run_id=scheduled__2024-12-08T12:00:00+00:00, execution_date=20241208T120000, start_date=20250114T025241, end_date=20250114T025241
-[2025-01-14T02:52:42.024+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
-[2025-01-14T02:52:42.039+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
-[2025-01-14T02:52:42.044+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2025-01-15T08:06:28.742+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-15T08:06:28.760+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [queued]>
+[2025-01-15T08:06:28.770+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [queued]>
+[2025-01-15T08:06:28.771+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 6
+[2025-01-15T08:06:28.791+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): pull_forex_data> on 2024-12-08 12:00:00+00:00
+[2025-01-15T08:06:28.805+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=184) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-01-15T08:06:28.804+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'forex_ml_pipeline', 'pull_forex_data', 'scheduled__2024-12-08T12:00:00+00:00', '--job-id', '199', '--raw', '--subdir', 'DAGS_FOLDER/forex_ml_pipeline.py', '--cfg-path', '/tmp/tmpvdo1riy_']
+[2025-01-15T08:06:28.807+0000] {standard_task_runner.py:72} INFO - Started process 205 to run task
+[2025-01-15T08:06:28.809+0000] {standard_task_runner.py:105} INFO - Job 199: Subtask pull_forex_data
+[2025-01-15T08:06:28.874+0000] {task_command.py:467} INFO - Running <TaskInstance: forex_ml_pipeline.pull_forex_data scheduled__2024-12-08T12:00:00+00:00 [running]> on host fcdf57df22df
+[2025-01-15T08:06:28.985+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mikhail' AIRFLOW_CTX_DAG_ID='forex_ml_pipeline' AIRFLOW_CTX_TASK_ID='pull_forex_data' AIRFLOW_CTX_EXECUTION_DATE='2024-12-08T12:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-08T12:00:00+00:00'
+[2025-01-15T08:06:28.986+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-15T08:06:29.010+0000] {logging_mixin.py:190} INFO - https://api.polygon.io/v2/aggs/ticker/C:USDPHP/range/4/hour/2024-01-01/2025-01-01
+[2025-01-15T08:06:29.011+0000] {logging_mixin.py:190} INFO - {'Authorization': 'Bearer ***', 'Content-Type': 'application/json'}
+[2025-01-15T08:06:29.015+0000] {logging_mixin.py:190} INFO - files: ['logs', 'dags', '***.cfg', 'plugins', 'config', 'data']
+[2025-01-15T08:06:29.015+0000] {logging_mixin.py:190} INFO - ilepaht: /opt/***/usd_php_forex_4hour.csv
+[2025-01-15T08:06:29.022+0000] {python.py:240} INFO - Done. Returned value was: None
+[2025-01-15T08:06:29.035+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-15T08:06:29.035+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=forex_ml_pipeline, task_id=pull_forex_data, run_id=scheduled__2024-12-08T12:00:00+00:00, execution_date=20241208T120000, start_date=20250115T080628, end_date=20250115T080629
+[2025-01-15T08:06:29.067+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-01-15T08:06:29.077+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
