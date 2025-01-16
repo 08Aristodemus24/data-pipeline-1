@@ -49,8 +49,23 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.4}
-  # build: .
+  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.4}
+  # indicating the image in the docker-compose.yaml file is 
+  # another alternative way of installing the image or version of
+  # this software (airflow) in the container
+  # In the Dockerfile instead of placing this image variable
+  # we can place it instead in the docker file i.e.
+  # 
+  # Dockerfile
+  # FROM apache/airflow:2.9.2
+  # COPY requirements.txt /
+  # RUN pip install --no-cache-dir -r /requirements.txt
+
+  # when we run docker compose up --build
+  # build is a variable that tells docker where to find the
+  # dockerfile that contains the softwares and packages needed
+  # to be installed in the docker container
+  build: .
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -89,6 +104,45 @@ x-airflow-common:
       condition: service_healthy
 
 services:
+  spark-master:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_MASTER_WEBUI_PORT=8081
+    ports:
+      - "8081:8081"
+      - "7077:7077"
+    volumes:
+      - spark-data:/bitnami
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
+    networks:
+      - airflow
+
+  spark-worker:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - spark-data:/bitnami
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
+    depends_on:
+      - spark-master
+    networks:
+      - airflow
+      
   postgres:
     image: postgres:13
     environment:

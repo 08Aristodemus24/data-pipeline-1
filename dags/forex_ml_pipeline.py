@@ -12,6 +12,7 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.models import Variable
 from airflow.configuration import conf
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
 from utilities.preprocessors import reformat_date
 from operators.pull_forex_data import pull_forex_data
@@ -30,7 +31,7 @@ from operators.transform_forex_data import transform_forex_data
 
 def test_pull_forex_data():
     # mimics replacement of file path when returned from pull_forex_data task
-    new_file_path = "/opt/***/data/usd_php_forex_4hour.csv".replace("***", "airflow")
+    new_file_path = "/opt/airflow/data/usd_php_forex_4hour.csv"
     return new_file_path
 
 # POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
@@ -72,9 +73,16 @@ with DAG(
         python_callable=test_pull_forex_data,
     )
 
-    transform_forex_data = PythonOperator(
+    # transform_forex_data = PythonOperator(
+    #     task_id='transform_forex_data',
+    #     python_callable=transform_forex_data
+    # )
+
+    transform_forex_data = SparkSubmitOperator(
         task_id='transform_forex_data',
-        python_callable=transform_forex_data
+        conn_id='my_spark_conn',
+        application='/dags/operators/transform_forex_data.py',
+        verbose=True
     )
     
     pull_forex_data >> transform_forex_data
