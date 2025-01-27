@@ -8,7 +8,7 @@ def transform_forex_data(file_path):
     usd_php_forex_4h_spark_df = spark.read.csv(file_path, header=True, inferSchema=True)
     usd_php_forex_4h_spark_df.createOrReplaceTempView("usd_php_forex")
     result = spark.sql("""
-        SELECT 
+        WITH trans_1 AS (SELECT 
             v AS volume, 
             vw AS volume_weighted, 
             o AS opening_price,
@@ -18,7 +18,15 @@ def transform_forex_data(file_path):
             t AS timestamp,
             n AS transactions,
             CAST(FROM_UNIXTIME(t / 1000) AS TIMESTAMP) AS new_datetime 
-        FROM usd_php_forex;
+        FROM usd_php_forex),
+                       
+        trans_2 AS (
+            *,
+            
+            AVG(closing_price) OVER(ORDER BY new_datetime ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_average_close
+        FROM trans_1)
+                       
+        SELECT * FROM trans_2;
     """)
     result.show()
 
