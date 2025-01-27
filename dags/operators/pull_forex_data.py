@@ -86,7 +86,8 @@ def pull_forex_data(start_date: str='january 1 2024',
     # will return usd_php
     ticker_name = "_".join([ticker_name[i:i + chunk_size].lower() for i in range(0, str_len, chunk_size)])
 
-    # save dataframe to .csv
+    # save dataframe to .csv. Note that save path is '/usr/local/airflow/include/data'
+    # file path of saved data would be '/usr/local/airflow/include/data/usd_php_forex_4hour.csv'
     file_path = os.path.join(save_path, f"{ticker_name}_forex_{multiplier}{timespan}.csv")
     forex_data.to_csv(file_path)
 

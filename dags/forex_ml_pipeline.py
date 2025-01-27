@@ -5,7 +5,6 @@ import shutil
 import time
 
 from pathlib import Path
-from dotenv import load_dotenv
 
 from airflow import DAG
 from airflow.operators.bash import BashOperator
@@ -29,21 +28,29 @@ from operators.transform_forex_data import transform_forex_data
 # https://crontab.guru/#00_12_*_*_Sun
 
 
-def test_pull_forex_data():
-    # mimics replacement of file path when returned from pull_forex_data task
-    new_file_path = "/opt/airflow/data/usd_php_forex_4hour.csv"
-    return new_file_path
+def test_pull_forex_data(formatter, api_key, save_path, ti):
+    # # mimics replacement of file path when returned from pull_forex_data task
+    # # relative file path
+    # new_file_path = "./include/data/usd_php_forex_4hour.csv"
 
-# POLYGON_API_KEY = os.environ.get('POLYGON_API_KEY')
+    # absolute file path
+    new_file_path = "/usr/local/airflow/include/data/usd_php_forex_4hour.csv"
+    ti.xcom_push(key="new_file_path", value=new_file_path)
+
+    print(f"api_key: {api_key}")
+    print(f"save_path: {save_path}")
+
+
+
 POLYGON_API_KEY = Variable.get('POLYGON_API_KEY')
 
 airflow_home = conf.get('core', 'dags_folder')
 BASE_DIR = Path(airflow_home).resolve().parent
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.path.join(BASE_DIR, 'include/data')
 
 default_args = {
     'owner': 'mikhail',
-    'retries': 5,
+    'retries': 3,
     'retry_delay': dt.timedelta(minutes=2)
 }
 
@@ -58,30 +65,25 @@ with DAG(
     catchup=True
 ) as dag:
     
-    # pull_forex_data = PythonOperator(
-    #     task_id='pull_forex_data',
-    #     python_callable=pull_forex_data,
-    #     op_kwargs={
-    #         "formatter": reformat_date,
-    #         "api_key": POLYGON_API_KEY,
-    #         "save_path": DATA_DIR
-    #     }
-    # )
-
     pull_forex_data = PythonOperator(
         task_id='pull_forex_data',
         python_callable=test_pull_forex_data,
+        # python_callable=pull_forex_data,
+        op_kwargs={
+            "formatter": reformat_date,
+            "api_key": POLYGON_API_KEY,
+            "save_path": DATA_DIR
+        }
     )
-
-    # transform_forex_data = PythonOperator(
-    #     task_id='transform_forex_data',
-    #     python_callable=transform_forex_data
-    # )
 
     transform_forex_data = SparkSubmitOperator(
         task_id='transform_forex_data',
         conn_id='my_spark_conn',
-        application='/dags/operators/transform_forex_data.py',
+        application='./dags/operators/transform_forex_data.py',
+
+        # pass argument vector to spark submit job operator since
+        # it is a file that runs like a script
+        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
         verbose=True
     )
     
