@@ -9,7 +9,7 @@ COPY ./requirements.txt ./
 # run a pip install
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-
+    
 # 2nd step is to install java development kit
 USER root
 
@@ -20,5 +20,7 @@ RUN apt update && \
     apt-get clean;
 
 # Set JAVA_HOME
-ENV JAVA_HOME='/usr/lib/jvm/java-17-openjdk-arm64'
+# if in macos use 
+# ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-arm64/
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64/
 RUN export JAVA_HOME
