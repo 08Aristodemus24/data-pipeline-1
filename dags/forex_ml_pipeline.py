@@ -6,15 +6,16 @@ import time
 
 from pathlib import Path
 
-from airflow import DAG
+from airflow import DAG, settings
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
-from airflow.models import Variable
+from airflow.models import Variable, Connection 
 from airflow.configuration import conf
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
 from utilities.preprocessors import reformat_date
 from operators.pull_forex_data import pull_forex_data
+from operators.test_pull_forex_data import test_pull_forex_data
 from operators.transform_forex_data import transform_forex_data
 # # pip install 'apache-airflow[amazon]'
 # from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
@@ -28,24 +29,31 @@ from operators.transform_forex_data import transform_forex_data
 # https://crontab.guru/#00_12_*_*_Sun
 
 
-def test_pull_forex_data(formatter, api_key, save_path, ti):
-    # # mimics replacement of file path when returned from pull_forex_data task
-    # # relative file path
-    # new_file_path = "./include/data/usd_php_forex_4hour.csv"
+# setup connections
+# create a connection object
+conn = Connection(
+        conn_id="my_spark_conn",
+        conn_type="Spark",
+        host="spark://spark-master",
+        login="admin",
+        password="admin",
+        port="7077"
+)
 
-    # absolute file path
-    new_file_path = "/usr/local/airflow/include/data/usd_php_forex_4hour.csv"
-    ti.xcom_push(key="new_file_path", value=new_file_path)
-
-    print(f"api_key: {api_key}")
-    print(f"save_path: {save_path}")
+session = settings.Session() # get the session
+session.add(conn)
+session.commit() # it will insert the connection object programmatically.
 
 
 
 POLYGON_API_KEY = Variable.get('POLYGON_API_KEY')
 
 airflow_home = conf.get('core', 'dags_folder')
+
+# base dir would be /usr/local/airflow/
 BASE_DIR = Path(airflow_home).resolve().parent
+
+# data dir once joined with base dir would be /usr/local/airflow/include/data/
 DATA_DIR = os.path.join(BASE_DIR, 'include/data')
 
 default_args = {
@@ -65,6 +73,7 @@ with DAG(
     catchup=False
 ) as dag:
     
+    print(f"airflow home: {airflow_home}")
     pull_forex_data = PythonOperator(
         task_id='pull_forex_data',
         python_callable=test_pull_forex_data,
@@ -75,16 +84,17 @@ with DAG(
             "save_path": DATA_DIR
         }
     )
-
-    transform_forex_data = SparkSubmitOperator(
-        task_id='transform_forex_data',
-        conn_id='my_spark_conn',
-        application='./dags/operators/transform_forex_data.py',
-
-        # pass argument vector to spark submit job operator since
-        # it is a file that runs like a script
-        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
-        verbose=True
-    )
     
-    pull_forex_data >> transform_forex_data
+    pull_forex_data
+    # transform_forex_data = SparkSubmitOperator(
+    #     task_id='transform_forex_data',
+    #     conn_id='my_spark_conn',
+    #     application='./dags/operators/transform_forex_data.py',
+
+    #     # pass argument vector to spark submit job operator since
+    #     # it is a file that runs like a script
+    #     application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
+    #     verbose=True
+    # )
+    
+    # pull_forex_data >> transform_forex_data
