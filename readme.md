@@ -23,6 +23,9 @@ C:\Users\LARRY\anaconda3\envs\data-pipeline-1\Lib\site-packages\airflow\__init__
 OSError while attempting to symlink the latest log directory
 ```
 to solve this we need to install a linux runtime environment in order to use airflow since airflow is built for a linux os 
+* in order to access amazon webservices programmatically you'd need to create a identity and access management (IAM) user, IAM is another amazon web service like EC2, S3, EMR, SageMaker, etc. that allows you to access these other services programmatically . Once you've created your IAM user you need to click the user you created go to security credentials tab and under the access keys section click create access keys, which will give you options like `**Local code** You plan to use this access key to enable application code in a local development environment to access your AWS account.`; this is the main option you must choose as this describes the situation where you are to read and write onto other amazon web services programmatically case on point from airflow. Once done store safely the `aws secret access key` and your `aws access key` in your `.env` file for now 
+
+
 
 # Tools that I might use:
 * Apache Airflow - data orchestration, workflow, and manager for steps in the data pipeline

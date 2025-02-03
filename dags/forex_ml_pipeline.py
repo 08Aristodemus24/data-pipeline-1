@@ -62,7 +62,7 @@ with DAG(
 
     # runs every sunday at 12:00 
     schedule_interval="00 12 * * Sun",
-    catchup=True
+    catchup=False
 ) as dag:
     
     pull_forex_data = PythonOperator(
