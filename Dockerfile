@@ -18,4 +18,4 @@ RUN export JAVA_HOME
 
 USER astro
 
-pip install apache-airflow-providers-amazon
+RUN pip install apache-airflow-providers-amazon

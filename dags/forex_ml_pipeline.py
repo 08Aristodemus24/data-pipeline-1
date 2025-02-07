@@ -29,26 +29,16 @@ from operators.transform_forex_data import transform_forex_data
 # https://crontab.guru/#00_12_*_*_Sun
 
 
-# setup connections
-# create a connection object
-conn = Connection(
-        conn_id="my_spark_conn",
-        conn_type="Spark",
-        host="spark://spark-master",
-        login="admin",
-        password="admin",
-        port="7077",
-        
-)
 
-session = settings.Session() # get the session
-session.add(conn)
-session.commit() # it will insert the connection object programmatically.
+def get_api_key(ti):
+    """
+    push api key to xcom so that pull_forex_data can access
+    this xcom    
+    """
+    api_key = Variable.get('POLYGON_API_KEY')
+    ti.xcom_push(key="api_key", value=api_key)
 
-
-
-POLYGON_API_KEY = Variable.get('POLYGON_API_KEY')
-
+# get airflow folder
 airflow_home = conf.get('core', 'dags_folder')
 
 # base dir would be /usr/local/airflow/
@@ -74,14 +64,17 @@ with DAG(
     catchup=False
 ) as dag:
     
-    print(f"airflow home: {airflow_home}")
+    get_api_key = PythonOperator(
+        task_id="get_api_key",
+        python_callable=get_api_key
+    )
+    
     pull_forex_data = PythonOperator(
         task_id='pull_forex_data',
         python_callable=test_pull_forex_data,
         # python_callable=pull_forex_data,
         op_kwargs={
             "formatter": reformat_date,
-            "api_key": POLYGON_API_KEY,
             "save_path": DATA_DIR
         }
     )
@@ -97,4 +90,4 @@ with DAG(
         verbose=True
     )
     
-    pull_forex_data >> transform_forex_data
+    get_api_key >> pull_forex_data >> transform_forex_data
