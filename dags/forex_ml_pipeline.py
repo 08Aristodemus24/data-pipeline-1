@@ -37,7 +37,8 @@ conn = Connection(
         host="spark://spark-master",
         login="admin",
         password="admin",
-        port="7077"
+        port="7077",
+        
 )
 
 session = settings.Session() # get the session
@@ -85,16 +86,15 @@ with DAG(
         }
     )
     
-    pull_forex_data
-    # transform_forex_data = SparkSubmitOperator(
-    #     task_id='transform_forex_data',
-    #     conn_id='my_spark_conn',
-    #     application='./dags/operators/transform_forex_data.py',
+    transform_forex_data = SparkSubmitOperator(
+        task_id='transform_forex_data',
+        conn_id='my_spark_conn',
+        application='./dags/operators/transform_forex_data.py',
 
-    #     # pass argument vector to spark submit job operator since
-    #     # it is a file that runs like a script
-    #     application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
-    #     verbose=True
-    # )
+        # pass argument vector to spark submit job operator since
+        # it is a file that runs like a script
+        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
+        verbose=True
+    )
     
-    # pull_forex_data >> transform_forex_data
+    pull_forex_data >> transform_forex_data

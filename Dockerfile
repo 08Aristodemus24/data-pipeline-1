@@ -17,3 +17,5 @@ ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64/
 RUN export JAVA_HOME
 
 USER astro
+
+pip install apache-airflow-providers-amazon
