@@ -6,15 +6,22 @@ import re
 import os
 
 
-def pull_forex_data(start_date: str='january 1 2024',
-    end_date: str='january 1 2025',
-    forex_ticker: str="C:USDPHP",
-    multiplier: int=4,
-    timespan: str='hour',
-    formatter=None,
-    api_key=None,
-    save_path: str="/") -> None:
-    
+def pull_forex_data(start_date,
+    end_date,
+    forex_ticker,
+    multiplier,
+    timespan,
+    formatter,
+    save_path,
+    ti) -> None:
+    """
+    collects forex data from the Polygon API and stores the values in a dataframe
+    to be uploaded in an S3 bucket
+    """
+
+    # get api key
+    api_key = ti.xcom_pull(key="api_key", task_ids="get_env_vars")
+
     # reformat date
     start_date_reformed = start_date if formatter == None else formatter(start_date)
     end_date_reformed = end_date if formatter == None else formatter(end_date)

@@ -17,12 +17,12 @@ from utilities.preprocessors import reformat_date
 from operators.pull_forex_data import pull_forex_data
 from operators.test_pull_forex_data import test_pull_forex_data
 from operators.transform_forex_data import transform_forex_data
-# # pip install 'apache-airflow[amazon]'
-# from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
-# from airflow.providers.amazon.aws.transfers.local_to_s3 import (
-#     LocalFilesystemToS3Operator,
-# )
-# from airflow.providers.amazon.aws.transfers.sql_to_s3 import SqlToS3Operator
+
+from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
+from airflow.providers.amazon.aws.transfers.local_to_s3 import (
+    LocalFilesystemToS3Operator,
+)
+from airflow.providers.amazon.aws.transfers.sql_to_s3 import SqlToS3Operator
 
 
 # go to this site if you want to use cron instead of datetime to set schedule_interval
@@ -30,13 +30,17 @@ from operators.transform_forex_data import transform_forex_data
 
 
 
-def get_api_key(ti):
+def get_env_vars(ti):
     """
     push api key to xcom so that pull_forex_data can access
     this xcom    
     """
-    api_key = Variable.get('POLYGON_API_KEY')
+    api_key = Variable.get("POLYGON_API_KEY")
+    aws_s3_region_name = Variable.get("AWS_S3_REGION_NAME")
+
+    print(type(aws_s3_region_name))
     ti.xcom_push(key="api_key", value=api_key)
+    ti.xcom_push(key="aws_s3_region_name", value=aws_s3_region_name)
 
 # get airflow folder
 airflow_home = conf.get('core', 'dags_folder')
@@ -46,6 +50,9 @@ BASE_DIR = Path(airflow_home).resolve().parent
 
 # data dir once joined with base dir would be /usr/local/airflow/include/data/
 DATA_DIR = os.path.join(BASE_DIR, 'include/data')
+
+# bucket name
+BUCKET_NAME = "usd-php-ml-pipeline-bucket"
 
 default_args = {
     'owner': 'mikhail',
@@ -64,30 +71,44 @@ with DAG(
     catchup=False
 ) as dag:
     
-    get_api_key = PythonOperator(
-        task_id="get_api_key",
-        python_callable=get_api_key
+    get_env_vars_task = PythonOperator(
+        task_id="get_env_vars",
+        python_callable=get_env_vars
+    )
+
+    create_s3_bucket_task = S3CreateBucketOperator(
+        task_id="create_s3_bucket",
+        aws_conn_id="my_s3_conn",
+        bucket_name=BUCKET_NAME, 
+        # region_name="{{ti.xcom_pull(key='aws_s3_region_name', task_ids='get_env_vars')}}"
+        region_name="us-east-2"
     )
     
-    pull_forex_data = PythonOperator(
+    pull_forex_data_task = PythonOperator(
         task_id='pull_forex_data',
         python_callable=test_pull_forex_data,
         # python_callable=pull_forex_data,
         op_kwargs={
+            # "start_date": "january 1 2024",
+            # "end_date": "january 1 2025",
+            # "ticker": "C:USDPHP",
+            # "multiplier": 4,
+            # "timespan": "hour",
             "formatter": reformat_date,
             "save_path": DATA_DIR
         }
     )
     
-    transform_forex_data = SparkSubmitOperator(
+    transform_forex_data_task = SparkSubmitOperator(
         task_id='transform_forex_data',
         conn_id='my_spark_conn',
         application='./dags/operators/transform_forex_data.py',
 
         # pass argument vector to spark submit job operator since
         # it is a file that runs like a script
-        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
+        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='test_pull_forex_data')}}"],
+        # application_args=["{{ti.xcom_pull(key='file_path', task_ids='pull_forex_data')}}"],
         verbose=True
     )
     
-    get_api_key >> pull_forex_data >> transform_forex_data
+    get_env_vars_task >> create_s3_bucket_task >> pull_forex_data_task >> transform_forex_data_task
