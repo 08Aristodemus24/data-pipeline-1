@@ -65,6 +65,7 @@ if __name__ == "__main__":
     # access argument vectors given in spark submit job operator
     # which will be the path to the newly saved .csv file
     file_path = sys.argv[1]
+    print(sys.argv)
 
     # pass file path to task
     transform_forex_data(file_path=file_path)

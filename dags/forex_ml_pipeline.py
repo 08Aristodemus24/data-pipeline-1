@@ -76,13 +76,13 @@ with DAG(
         python_callable=get_env_vars
     )
 
-    create_s3_bucket_task = S3CreateBucketOperator(
-        task_id="create_s3_bucket",
-        aws_conn_id="my_s3_conn",
-        bucket_name=BUCKET_NAME, 
-        # region_name="{{ti.xcom_pull(key='aws_s3_region_name', task_ids='get_env_vars')}}"
-        region_name="us-east-2"
-    )
+    # create_s3_bucket_task = S3CreateBucketOperator(
+    #     task_id="create_s3_bucket",
+    #     aws_conn_id="my_s3_conn",
+    #     bucket_name=BUCKET_NAME, 
+    #     # region_name="{{ti.xcom_pull(key='aws_s3_region_name', task_ids='get_env_vars')}}"
+    #     region_name="us-east-2"
+    # )
     
     pull_forex_data_task = PythonOperator(
         task_id='pull_forex_data',
@@ -106,9 +106,9 @@ with DAG(
 
         # pass argument vector to spark submit job operator since
         # it is a file that runs like a script
-        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='test_pull_forex_data')}}"],
+        application_args=["{{ti.xcom_pull(key='new_file_path', task_ids='pull_forex_data')}}"],
         # application_args=["{{ti.xcom_pull(key='file_path', task_ids='pull_forex_data')}}"],
         verbose=True
     )
     
-    get_env_vars_task >> create_s3_bucket_task >> pull_forex_data_task >> transform_forex_data_task
+    get_env_vars_task >> pull_forex_data_task >> transform_forex_data_task
